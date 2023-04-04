@@ -14,24 +14,29 @@ const EditPostModal = ({ handleClose, status, closeForm, id }) => {
   const { title, content } = editablePost[0];
   const [values, setValues] = useState({
     title,
-    content
+    content,
   });
 
   const handleEditPost = () => {
-    setValues({ title: '', content: '' });
-    dispatch(postUpdated({
-      id: id,
-      title: values.title,
-      content: values.content
-    }));
+    setValues({ title: "", content: "" });
+    dispatch(
+      postUpdated({
+        id: id,
+        title: values.title,
+        content: values.content,
+      })
+    );
     closeForm();
-  }
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setValues({ ...values, [name]: value });
   };
 
+  const readyToSave =
+    Boolean(title.trim() !== values.title) ||
+    Boolean(content.trim() !== values.content);
 
   return (
     <div className="add-post">
@@ -60,7 +65,7 @@ const EditPostModal = ({ handleClose, status, closeForm, id }) => {
               label="Заголовок посту"
               name="title"
               value={values.title}
-              onChange={handleInputChange}              
+              onChange={handleInputChange}
               variant="outlined"
             />
             <Textarea
@@ -71,7 +76,7 @@ const EditPostModal = ({ handleClose, status, closeForm, id }) => {
               placeholder="Type anything…"
               name="content"
               value={values.content}
-              onChange={handleInputChange}             
+              onChange={handleInputChange}
               variant="outlined"
             />
             <Button
@@ -79,6 +84,7 @@ const EditPostModal = ({ handleClose, status, closeForm, id }) => {
               onClick={handleEditPost}
               size="large"
               endIcon={<SendIcon />}
+              disabled={!readyToSave}
             >
               Зберегти зміни
             </Button>
